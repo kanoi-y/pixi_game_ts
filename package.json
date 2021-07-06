@@ -6,11 +6,13 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "webpack": "webpack-cli -w",
-        "typings": "typings search jquery"
+        "typings": "typings search jquery",
+        "server": "http-server -o"
     },
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "http-server": "^0.12.3",
         "pixi-filters": "^3.2.2",
         "pixi-sound": "^3.0.5",
         "pixi.js": "^5.3.7"
