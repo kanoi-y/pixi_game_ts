@@ -45,6 +45,7 @@ PIXI.Loader.shared.load((loader, resources) => {
   let score = 0; // スコア
   let ballVx = 5; // ボールの毎フレーム動くx方向
   let ballVy = 0; // ボールの毎フレーム動くy方向
+  let startFlag = false;
   // // このあたりに書いていた、ボタン生成関数やシーン移行関数は別ファイルにまとめてモジュール化しました
   // // このファイル先頭でimportしてファイルを引っ張ってきています。便利！
   // /**
@@ -100,6 +101,14 @@ PIXI.Loader.shared.load((loader, resources) => {
     const text = new PIXI.Text("SCORE:0", textStyle); //スコア表示テキスト
     gameScene.addChild(text); // スコア表示テキストを画面に追加する
 
+    const startButton = createButton("スタート", 100, 60, 0xff0000, () => {
+      startFlag = true;
+      startButton.visible = false;
+    });
+    startButton.x = 150; // ボタンの座標指定
+    startButton.y = 270; // ボタンの座標指定
+    gameScene.addChild(startButton);
+
     function onmousemove(e: MouseEvent) {
       if (e.pageX <= 0) {
         bar.x = 0;
@@ -115,7 +124,8 @@ PIXI.Loader.shared.load((loader, resources) => {
       // 毎フレームごとに処理するゲームループ
       // スコアテキストを毎フレームアップデートする
       text.text = `SCORE:${score}`;
-      if (score === 0) return; // スコアが０の時(球に触っていないとき)はここで終了させる
+      //   if (score === 0) return; // スコアが０の時(球に触っていないとき)はここで終了させる
+      if (startFlag === false) return;
       ball.x += ballVx; // ボールに速度を加算
       ball.y += ballVy; // ボールに速度を加算
       if (ball.x > 340) {
@@ -137,6 +147,8 @@ PIXI.Loader.shared.load((loader, resources) => {
       if (ball.y >= 490 && ball.y <= 520) {
         if (ball.x - bar.x <= 80 && ball.x - bar.x >= -60) {
           ballVy = -8;
+          score++;
+          resources["sound/hit.mp3"].sound.play(); // クリックで音が鳴る
         }
       }
     }
